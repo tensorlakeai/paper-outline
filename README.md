@@ -1,4 +1,4 @@
-# Paper Outline - TensorLake Application
+# arxiv Paper Outline and Summarization API 
 
 A TensorLake application that processes research papers (PDFs) using Google's Gemini AI to create structured outlines and detailed section expansions, storing the results in PostgreSQL.
 
