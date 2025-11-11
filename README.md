@@ -115,10 +115,19 @@ The application doesn't return any data back when the request finishes, it write
 curl https://api.tensorlake.ai/applications/process_paper/requests/h-0XJD_eE1JTH90ylW4f- \
 -H "Authorization: Bearer $TENSORLAKE_API_KEY"
 #{"id":"h-0XJD_eE1JTH90ylW4f-","outcome":"success", ... }
+```
+
+### Output 
+The outputs from the application are written in Postgres. We used Neon for testing, you can chose any other database 
+
+<img width="1214" height="268" alt="Screenshot 2025-11-10 at 8 53 43 PM" src="https://github.com/user-attachments/assets/adf91b4b-27e4-4d6e-bb39-2e98c2f8f71f" />
 
 
 ## Dashboard
-You can observe the state of the request on Tensorlake's UI as well. 
+You can observe the state of the request on Tensorlake's UI as well.
+
+<img width="1726" height="911" alt="Screenshot 2025-11-10 at 8 52 31 PM" src="https://github.com/user-attachments/assets/d7bcd0f0-b35f-4fb8-b9f2-b9057dad2fc6" />
+
 
 ## local development:
 
