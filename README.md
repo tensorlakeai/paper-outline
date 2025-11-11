@@ -3,22 +3,15 @@
 A TensorLake application that processes research papers (PDFs) using Google's Gemini AI to create structured outlines and detailed section expansions, storing the results in PostgreSQL.
 
 ## Features
+- PDF ingestion: Fetches and processes PDFs from URLs
+- Outline generation: Extracts title, authors, abstract, keywords, and full section hierarchy
+- Section expansion: Produces detailed per-section summaries, key findings, methods, results, and notable references
+- Database storage: Saves all structured output into PostgreSQL (tested with Neon; works with Supabase or any Postgres)
 
-- **PDF Processing**: Downloads and processes PDF files from URLs
-- **Structured Outline Creation**: Extracts paper metadata including:
-  - Title and authors
-  - Abstract
-  - Complete section hierarchy with descriptions
-  - Keywords and key concepts
-- **Section Expansion**: Detailed analysis of each section with:
-  - Comprehensive summaries
-  - Key points and findings
-  - Methodologies and approaches
-  - Results and their significance
-  - Referenced figures, tables, and equations
-  - Citations
-- **PostgreSQL Storage**: Stores all structured data in a relational database. Used Neon for testing, but can be replaced with Supabase, etc.
-- **Parallel Processing**: Leverages TensorLake's distributed execution for efficient processing
+## Why TensorLake?
+-	**Write code like a monolith, get a distributed system for free** <br/>Your app is just Python functions calling each other. TensorLake runs each function in its own container, scales them independently, and parallelizes requests without any orchestration code.
+-	**Automatic queueing, scaling, and backpressure** <br/>You don’t need Celery, Kafka, Kubernetes, autoscalers, or job runners. The runtime queues requests, spins up more containers for bottleneck functions, and processes workloads at whatever concurrency the code can handle.
+- **Durable, restartable execution** <br/> If a long-running request crashes halfway (PDF too large, LLM timeout, network blip), it resumes from the last function boundary instead of restarting from scratch.
 
 ## Architecture
 
