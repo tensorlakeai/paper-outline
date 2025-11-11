@@ -1,0 +1,135 @@
+# Paper Outline - TensorLake Application
+
+A TensorLake application that processes research papers (PDFs) using Google's Gemini AI to create structured outlines and detailed section expansions, storing the results in PostgreSQL.
+
+## Features
+
+- **PDF Processing**: Downloads and processes PDF files from URLs
+- **Structured Outline Creation**: Extracts paper metadata including:
+  - Title and authors
+  - Abstract
+  - Complete section hierarchy with descriptions
+  - Keywords and key concepts
+- **Section Expansion**: Detailed analysis of each section with:
+  - Comprehensive summaries
+  - Key points and findings
+  - Methodologies and approaches
+  - Results and their significance
+  - Referenced figures, tables, and equations
+  - Citations
+- **PostgreSQL Storage**: Stores all structured data in a relational database. Used Neon for testing, but can be replaced with Supabase, etc.
+- **Parallel Processing**: Leverages TensorLake's distributed execution for efficient processing
+
+## Architecture
+
+The application consists of four main functions:
+
+1. **`create_outline(pdf_url)`**: Downloads PDF and creates structured outline using Gemini
+2. **`expand_section(pdf_url, section_title, section_description)`**: Expands a single section with detailed structured data
+3. **`expand_all_sections(outline)`**: Orchestrates parallel expansion of all sections
+4. **`write_to_postgres(outline, expanded_sections)`**: Stores all data in PostgreSQL
+5. **`process_paper(pdf_url)`**: Main orchestration function that chains all steps
+
+## Database Schema
+
+### `papers` Table
+```sql
+- id (SERIAL PRIMARY KEY)
+- title (TEXT)
+- authors (TEXT[])
+- abstract (TEXT)
+- keywords (TEXT[])
+- pdf_url (TEXT)
+- outline (JSONB)
+- created_at (TIMESTAMP)
+```
+
+### `paper_sections` Table
+```sql
+- id (SERIAL PRIMARY KEY)
+- paper_id (INTEGER, foreign key)
+- section_title (TEXT)
+- section_description (TEXT)
+- subsections (TEXT[])
+- summary (TEXT)
+- key_points (TEXT[])
+- methodologies (JSONB)
+- results (JSONB)
+- figures_and_tables (JSONB)
+- citations (TEXT[])
+- created_at (TIMESTAMP)
+```
+
+## Setup
+
+### Prerequisites
+
+- TensorLake CLI installed (`pip install tensorlake`)
+- Gemini API key
+- PostgreSQL database
+
+### Configuration
+
+1. **Authenticate with TensorLake**:
+   ```bash
+   tensorlake login
+   tensorlake whoami
+   ```
+
+2. **Set up secrets**:
+   ```bash
+   # Gemini API key
+   tensorlake secrets set GEMINI_API_KEY=your_gemini_api_key
+
+   # PostgreSQL connection string
+   tensorlake secrets set POSTGRES_CONNECTION_STRING="postgresql://user:password@host:port/database"
+   ```
+
+### Deployment
+
+Deploy the application to TensorLake:
+
+```bash
+tensorlake deploy paper_outline_app.py
+```
+
+Once the application is deployed, it's available as an HTTP API -
+
+```
+https://api.tensorlake.ai/applications/process_paper
+```
+
+## Usage
+
+### Via HTTP
+```bash
+curl https://api.tensorlake.ai/applications/process_paper \
+-H "Authorization: Bearer $TENSORLAKE_API_KEY" \
+--json '"https://www.arxiv.org/pdf/2510.18234"'
+```
+
+### Status 
+The application doesn't return any data back when the request finishes, it writes the processed data in the database. You can poll for the request ID to know the status of the request. 
+
+```bash
+curl https://api.tensorlake.ai/applications/process_paper/requests/h-0XJD_eE1JTH90ylW4f- \
+-H "Authorization: Bearer $TENSORLAKE_API_KEY"
+#{"id":"h-0XJD_eE1JTH90ylW4f-","outcome":"success", ... }
+
+
+## Dashboard
+You can observe the state of the request on Tensorlake's UI as well. 
+
+## local development:
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+export GEMINI_API_KEY=your_key
+export POSTGRES_CONNECTION_STRING=your_connection_string
+
+# Test locally
+python paper_outline_app.py
+```
