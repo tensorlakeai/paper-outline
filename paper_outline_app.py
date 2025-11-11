@@ -480,3 +480,18 @@ def process_paper(pdf_url: str) -> Dict[str, Any]:
     result = write_to_postgres(outline, expanded_sections)
 
     return result
+
+
+if __name__ == "__main__":
+    from tensorlake.applications import run_local_application, Request
+
+    pdf_url = "https://arxiv.org/pdf/1706.03762.pdf
+
+    print(f"Processing paper from: {pdf_url}")
+    print("This may take several minutes...\n")
+
+    request: Request = run_local_application(process_paper, pdf_url)
+
+    print(request.output())
+
+
