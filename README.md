@@ -23,36 +23,6 @@ The application consists of four main functions:
 4. **`write_to_postgres(outline, expanded_sections)`**: Stores all data in PostgreSQL
 5. **`process_paper(pdf_url)`**: Main orchestration function that chains all steps
 
-## Database Schema
-
-### `papers` Table
-```sql
-- id (SERIAL PRIMARY KEY)
-- title (TEXT)
-- authors (TEXT[])
-- abstract (TEXT)
-- keywords (TEXT[])
-- pdf_url (TEXT)
-- outline (JSONB)
-- created_at (TIMESTAMP)
-```
-
-### `paper_sections` Table
-```sql
-- id (SERIAL PRIMARY KEY)
-- paper_id (INTEGER, foreign key)
-- section_title (TEXT)
-- section_description (TEXT)
-- subsections (TEXT[])
-- summary (TEXT)
-- key_points (TEXT[])
-- methodologies (JSONB)
-- results (JSONB)
-- figures_and_tables (JSONB)
-- citations (TEXT[])
-- created_at (TIMESTAMP)
-```
-
 ## Setup
 
 ### Prerequisites
